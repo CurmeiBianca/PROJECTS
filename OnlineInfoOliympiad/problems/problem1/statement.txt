@@ -1,0 +1,12 @@
+Se da un numar N si apoi N numere intregi.
+Sa se calculeze suma acestora.
+
+~Exemplu~
+Intrare:
+5
+10 20 5 15 10
+
+Iesire:
+60
+
+Explicatie: 10 + 20 + 5 + 15 + 10 = 60.

@@ -1,0 +1,12 @@
+Se da un numar N si apoi N numere intregi.
+Sa se determine valoarea maxima.
+
+~Exemplu~
+Intrare:
+4
+8 -2 15 3
+
+Iesire:
+15
+
+Explicatie: Dintre numerele {8, -2, 15, 3}, valoarea maxima este 15.

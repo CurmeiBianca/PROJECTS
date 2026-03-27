@@ -1,0 +1,12 @@
+Se da un numar N si N numere intregi.
+Sa se afiseze vectorul sortat crescator.
+
+~Exemplu~
+Intrare:
+6
+12 5 8 12 1 7
+
+Iesire:
+1 5 7 8 12 12
+
+Explicatie: Elementele in ordine crescatoare sunt 1, 5, 7, 8, 12 si 12.

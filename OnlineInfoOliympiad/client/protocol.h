@@ -1,0 +1,20 @@
+#ifndef PROTOCOL_H
+#define PROTOCOL_H
+
+#define PORT 5151 
+#define BUFFER_SIZE 1024 
+
+#define MAX_TESTS 3 
+#define MAX_PROBLEMS 5 
+
+#define END_PROBLEM "END_PROBLEM" 
+#define END_SOLUTION "END" 
+#define END_RANKING "END_RANKING" 
+
+#define PROBLEM_TIME_LIMIT 300 
+#define MAX_TOTAL_SCORE 100.0 
+#define WEIGHT_TESTS 70.0 
+#define WEIGHT_WRITTING 15.0 
+#define WEIGHT_EXEC 15.0
+
+#endif

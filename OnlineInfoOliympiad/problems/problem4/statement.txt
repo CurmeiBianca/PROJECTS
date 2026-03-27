@@ -1,0 +1,22 @@
+Se da un vector si o valoare X.
+Sa se afiseze pozitia lui X (pozitie 0-indexata) sau -1 daca nu exista.
+
+~Exemplul 1 (X exista)~
+Intrare:
+5
+10 20 30 40 50
+30
+
+Iesire:
+2
+
+~Exemplul 2 (X nu exista)~
+Intrare:
+4
+1 5 8 12
+10
+
+Iesire:
+-1
+
+Explicatie: In primul exemplu, 30 se afla pe a treia pozitie (index 2). In al doilea, 10 nu apare in vector.

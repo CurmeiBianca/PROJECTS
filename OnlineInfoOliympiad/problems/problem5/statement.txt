@@ -1,0 +1,13 @@
+Se da un vector si o valoare X.
+Sa se afiseze de cate ori apare X.
+
+~Exemplu~
+Intrare:
+7
+5 2 8 5 3 5 1
+5
+
+Iesire:
+3
+
+Explicatie: Valoarea X = 5 apare de 3 ori in vectorul dat (la pozitiile 0, 3 si 5)
