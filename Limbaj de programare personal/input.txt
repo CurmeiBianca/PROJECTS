@@ -1,0 +1,110 @@
+// ========================================
+// PROGRAM DE TEST PENTRU LIMBAJUL ARCANA
+// Respecta restrictiile enuntului:
+// - Definitii de variabile doar Global sau in Functii
+// - Fara definitii in blocul MAIN (turnul_de_fildes)
+// ========================================
+
+// ========================================
+// VARIABILE GLOBALE (Permise aici)
+// ========================================
+
+piatra_filosofala x leaga_de 10 puf_de_pix
+aur_topit y leaga_de 2.5 puf_de_pix
+clarviziune ok leaga_de lumina puf_de_pix
+pergament mesaj leaga_de "Salut din Arcana!" puf_de_pix
+
+// Variabila pentru a stoca rezultatul apelului de functie
+piatra_filosofala temp_rezultat puf_de_pix 
+
+// Obiect global pentru test acces membru
+arcana Alchimist mag puf_de_pix
+
+// ========================================
+// DEFINIRE CLASA (Doar in scope Global)
+// ========================================
+
+arcana Alchimist incepe_vraja
+
+    // campuri ale clasei
+    piatra_filosofala nivel puf_de_pix
+    aur_topit putere puf_de_pix
+
+    // metoda clasei
+    piatra_filosofala calculeaza
+    (
+        piatra_filosofala bonus
+    )
+    incepe_vraja
+        return nivel + bonus puf_de_pix
+    sfarseste_vraja
+
+sfarseste_vraja puf_de_pix
+
+// ========================================
+// FUNCTIE GLOBALA
+// ========================================
+
+piatra_filosofala aduna
+(
+    piatra_filosofala a,
+    piatra_filosofala b
+)
+incepe_vraja 
+    // Definitie locala (Permisa in functii conform enuntului)
+    piatra_filosofala rezultat leaga_de a + b puf_de_pix
+    return rezultat puf_de_pix
+sfarseste_vraja
+
+// ========================================
+// MAIN BLOCK (turnul_de_fildes)
+// DOAR instructiuni (atribuiri, print, control)
+// NU sunt permise definitii (ex: piatra_filosofala z...)
+// ========================================
+
+turnul_de_fildes incepe_vraja
+
+    // ----------------------------------------
+    // Evaluare expresii aritmetice
+    // ----------------------------------------
+    x leaga_de x + 5 * 2 puf_de_pix
+    Vorbeste_cu_duhurile(x) puf_de_pix
+
+    // ----------------------------------------
+    // Apel functie globala
+    // ----------------------------------------
+    // Folosim variabila globala deja declarata
+    temp_rezultat leaga_de aduna(3, 4) puf_de_pix
+    Vorbeste_cu_duhurile(temp_rezultat) puf_de_pix
+
+    // ----------------------------------------
+    // Structura conditionala 
+    // ----------------------------------------
+    daca_sorteaza (x > 10 && ok)
+    incepe_vraja
+        Vorbeste_cu_duhurile("x este mai mare decat 10") puf_de_pix
+    sfarseste_vraja
+    altfel
+    incepe_vraja
+        Vorbeste_cu_duhurile("x este mai mic") puf_de_pix
+    sfarseste_vraja
+
+    // ----------------------------------------
+    // While loop
+    // ----------------------------------------
+    cat_e_luna (x > 10)
+    incepe_vraja
+        x leaga_de x - 1 puf_de_pix
+        Vorbeste_cu_duhurile(x) puf_de_pix
+    sfarseste_vraja
+
+    // ----------------------------------------
+    // Obiect si acces membru
+    // ----------------------------------------
+    mag leaga_de nou Alchimist() puf_de_pix
+    mag atinge nivel leaga_de 3 puf_de_pix
+
+    Vorbeste_cu_duhurile("Test finalizat") puf_de_pix
+
+sfarseste_vraja
+

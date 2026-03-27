@@ -1,0 +1,23 @@
+=== Symbol Table: Global (Global Scope) ===
+  Alchimist : class | Value: {object}
+  aduna : int (Return: int, Params: a:int, b:int)
+  mag : instance of Alchimist | Value: {object}
+  mesaj : string | Value: "Salut din Arcana!"
+  ok : bool | Value: lumina
+  temp_rezultat : int | Value: 0
+  x : int | Value: 20
+  y : float | Value: 2.5
+
+=== Symbol Table: Alchimist (Parent Scope: Global) ===
+  calculeaza : int (Return: int, Params: bonus:int)
+  nivel : int | Value: 0
+  putere : float | Value: 0
+
+=== Symbol Table: calculeaza (Parent Scope: Alchimist) ===
+  bonus : int | Value: 0
+
+=== Symbol Table: aduna (Parent Scope: Global) ===
+  a : int | Value: 0
+  b : int | Value: 0
+  rezultat : int | Value: 0
+
