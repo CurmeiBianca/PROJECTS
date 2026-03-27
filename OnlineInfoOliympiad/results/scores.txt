@@ -1,8 +1,0 @@
-
-Nume: stud_20656 | Scor: 0.00 | Scriere: 21.00 | Compilare: 0.000 | Exec: 0.000 | Status: ERR_COMP
-Nume: stud_20825 | Scor: 0.00 | Scriere: 19.00 | Compilare: 0.078 | Exec: 0.000 | Status: ERR_COMP
-Nume: stud_21972 | Scor: 0.00 | Scriere: 30.00 | Compilare: 0.072 | Exec: 0.000 | Status: ERR_COMP
-Nume: stud_22463 | Scor: 0.00 | Scriere: 24.00 | Compilare: 0.076 | Exec: 0.000 | Status: OK
-Nume: stud_9402 | Scor: 0.00 | Scriere: 84.00 | Compilare: 0.037 | Exec: 0.000 | Status: ERR_COMP
-Nume: stud_9402 | Scor: 0.00 | Scriere: 147.00 | Compilare: 0.031 | Exec: 0.000 | Status: ERR_COMP
-Nume: stud_9533 | Scor: 0.00 | Scriere: 33.00 | Compilare: 0.096 | Exec: 0.000 | Status: OK
