@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movie Platform</title>
+        <style>
+            /* Reset general - elimina marginile si padding-ul implicit al browserului */
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+
+            /* Stilul general al paginii - fond inchis (ex: Netflix) */
+            body {
+                font-family: 'Segoe UI', sans-serif;
+                background: #141414;
+                color: #fff;
+            }
+
+            /* Header-ul fix in partea de sus a paginii */
+            header {
+                background: #000;
+                padding: 20px 40px;
+                display: flex;
+                align-items: center;
+                gap: 40px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            /* Titlul aplicatiei in rosu */
+            header h1 {
+                color: #e50914;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            /* Butoanele din meniu */
+            nav button {
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 15px;
+                cursor: pointer;
+                padding: 8px 16px;
+                border-radius: 4px;
+                transition: background 0.2s;
+            }
+
+            /* Butonul activ sau hover devine rosu */
+            nav button:hover, nav button.active {
+                background: #e50914;
+            }
+
+            .container { padding: 40px; }
+
+            h2 {
+                font-size: 22px;
+                margin-bottom: 20px;
+                color: #e20914;
+            }
+
+            /* Grid responsiv pentru cardurile de filme */
+            .movies-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            /* Cardul unui film */
+            .movie-card {
+                background: #1f1f1f;
+                border-radius: 8px;
+                padding: 16px;
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            /* Efect hover pe card */
+            .movie-card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px rgba(229,9,20,0.3);
+            }
+
+            .movie-card h3 { font-size: 15px; margin-bottom: 8px; }
+
+            /* Badge-ul pentru categoria filmului */
+            .movie-card .category {
+                background: #e50914;
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+
+            /* Rating-ul in galben */
+            .movie-card .rating {
+                color: #f5c518;
+                font-size: 14px;
+            }
+
+            /* Sectiunile paginii - ascunde implicit */
+            .section { display: none; }
+            /* Sectiunea activa este vizibila */
+            .section.active { display: block; }
+
+            /* Grup de inputuri pentru formulare */
+            .input-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                max-width: 400px;
+                margin-bottom: 20px;
+            }
+
+            /* Stilul campurilor de input */
+            input, select, textarea {
+                background: #1f1f1f;
+                border: 1px solid #333;
+                color: #fff;
+                padding: 10px;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            /* Butoanele de actiune */
+            button.btn {
+                background: #350914;
+                color: #fff;
+                border: none;
+                padding: 10px 24px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 15px;
+                transition: background 0.2s;
+            }
+
+            button.btn:hover { background: #b20710; }
+
+            /* Tabelul pentru afisarea rezultatelor */
+            .result-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .result-table th {
+                background: #e20914;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .result-table td {
+                padding: 10px;
+                border-bottom: 1px solid #333;
+            }
+
+            .result-table tr:hover { background: #1f1f1f; }
+
+            /* Modalul pentru detalii film */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 200;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* Modalul devine vizibil cand are clasa open */
+            .modal.open { display: flex; }
+
+            .modal-content {
+                background: #1f1f1f;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 600px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .modal-content h3 {
+                color: #e50914;
+                margin-bottom: 16px;
+                font-size: 20px;
+            }
+
+            .modal-content p { margin-bottom: 8px; color: #ccc; }
+
+            /* Butonul de inchidere al modalului */
+            .close-btn {
+                float: right;
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            /* Grid pentru checkboxurile din formularul de recenzie */
+            .checkboxes {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin: 10px 0;
+            }
+
+            .checkboxes label {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 14px;
+            }
+
+            /* Mesaje de succes sau de eroare */
+            .message {
+                padding: 12px;
+                border-radius: 4px;
+                margin-top: 10px;
+                display: none;
+            }
+
+            .message.success { background: #1a5c1a; color: #4caf50; display: block; }
+            .message.error { background: #5c1a1a; color: #f44336; display: block; }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Header cu navigatia principala -->
+        <header>
+            <h1>🎬 MoviePlatform</h1>
+            <nav>
+                <!-- Fiecare buton schimba sectiunea activa -->
+                <button class="active" onclick="showSection('movies')">Filme</button>
+                <button onclick="showSection('history')">Istoric Client</button>
+                <button onclick="showSection('recommendations')">Recomandari</button>
+                <button onclick="showSection('watchlist')">Adauga Vizionare</button>
+                <button onclick="showSection('review')">Adauga Recenzie</button>
+            </nav>
+        </header>
+
+         <div class="container">
+
+            <!-- SECTIUNEA 1: Lista tuturor filmelor -->
+            <div id="movies" class="section active">
+                <h2>🎥 Toate Filmele</h2>
+                <!-- Grid-ul se populeaza dinamic din JavaScript -->
+                <div class="movies-grid" id="moviesGrid"></div>
+            </div>
+
+            <!-- SECTIUNEA 2: Istoricul vizionarilor unui client -->
+            <div id="history" class="section">
+                <h2>📋 Istoricul Vizionarilor</h2>
+                <div class="input-group">
+                    <input type="number" id="historyClientId"
+                            placeholder="Introdu ID client (ex: 1)" min="1">
+                    <button class="btn" onclick="loadHistory()">Vezi Istoric</button>
+                </div>
+                <!-- Mesaj de eroare daca clientul nu exista -->
+                <div id="historyMessage" class="message"></div>
+                <!-- Tabelul de istoricul - ascuns initial -->
+                <table class="result-table" id="historyTable" style="display:none">
+                    <thead>
+                        <tr>
+                            <th>Film</th>
+                            <th>Categorie</th>
+                            <th>Data Vizionării</th>
+                            <th>Durată (min)</th>
+                            <th>Status</th>
+                            <th>Vot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                  </table>
+            </div>
+
+            <!-- SECTIUNEA 3: Recomandari personalizate -->
+            <div id="recommendations" class="section">
+                <h2>⭐ Recomandari Personalizate</h2>
+                <div class="input-group">
+                    <input type="number" id="recClientId"
+                            placeholder="Introdu ID client (ex: 1)" min="1">
+                    <button class="btn" onclick="loadRecommendations()">
+                        Vezi Recomandari
+                    </button>
+                </div>
+                <div id="recMessage" class="message"></div>
+                <!-- Cardurile cu filmele recomandate -->
+                <div class="movies-grid" id="recGrid"></div>
+            </div>
+
+            <!-- SECTIUNEA 4: Formular adaugare si vizionare -->
+            <div id="watchlist" class="section">
+                <h2>➕ Adauga Vizionare</h2>
+                <div class="input-group">
+                    <input type="number" id="wClientId" placeholder="ID Client" min="1">
+                    <input type="number" id="wMovieId" placeholder="ID Film" min="1">
+                    <input type="number" id="wVersionId" placeholder="ID Versiune" min="1">
+                    <input type="number" id="wDuration" placeholder="Durată (minute)" min="1">
+                    <button class="btn" onclick="addWatchlist()">Adaugă</button>
+                </div>
+                <!-- Mesaj succes/eroare dupa trimitere -->
+                <div id="watchlistMessage" class="message"></div>
+            </div>
+
+            <!-- SECTIUNEA 5: Formular adaugare recenzie -->
+            <div id="review" class="section">
+                <h2>✍️ Adauga Recenzie</h2>
+                <div class="input-group">
+                    <input type="number" id="rClientId" placeholder="ID Client" min="1">
+                    <input type="number" id="rMovieId" placeholder="ID Film" min="1">
+                    <input type="number" id="rVote" placeholder="Vot (1-10)" min="1" max="10">
+                    <textarea id="rComment" placeholder="Comentariu..." rows="3"></textarea>
+                </div>
+                <!-- Optiuni predefinite pentru recenzie -->
+                <div class="checkboxes">
+                    <label><input type="checkbox" id="rLiked"> Mi-a plăcut</label>
+                    <label><input type="checkbox" id="rInteresting"> Interesant</label>
+                    <label><input type="checkbox" id="rRecommend"> Aș recomanda</label>
+                    <label><input type="checkbox" id="rRewatch"> Aș mai viziona</label>
+                    <label><input type="checkbox" id="rActing"> Actor principal apreciat</label>
+                </div>
+                <button class="btn" onclick="addReview()">Trimite Recenzia</button>
+                <div id="reviewMessage" class="message"></div>
+            </div>
+
+        </div>
+
+        <!-- MODAL: Fereastra  cu detaliile unui film (apare la click pe card) -->
+        <div class="modal" id="movieModal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal()">✕</button>
+                <h3 id="modalTitle"></h3>
+                <p id="modalCategory"></p>
+                <p id="modalRating"></p>
+                <p id="modalDate"></p>
+                <p id="modalDescription"></p>
+                <h4 style="margin-top:16px; margin-bottom:8px;">Actori:</h4>
+                <div id="modalActors"></div>
+            </div>
+        </div>
+
+        <script>
+            // Adresa de baza a API-ului Spring Boot
+            const API = 'http://localhost:8080/api';
+
+            // Schimba sectiunea vizibila la click pe butonul din navigatie
+            function showSection(name) {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+                document.getElementById(name).classList.add('active');
+                event.target.classList.add('active');
+            }
+
+            // Incarca toate filmele din baza de date si le afiseaza ca si carduri
+            async function loadMovies() {
+                const res = await fetch(`${API}/movies`);
+                const movies = await res.json();
+                const grid = document.getElementById('moviesGrid');
+                grid.innerHTML = '';
+                movies.forEach(m => {
+                    grid.innerHTML += `
+                        <div class="movie-card" onclick="showMovieDetails(${m.movie_id})">
+                            <h3>${m.title}</h3>
+                            <span class="category">${m.category}</span>
+                            <p class="rating">⭐ ${m.rating}</p>
+                            <p style="font-size:12px;color:#888;margin-top:6px;">
+                                ${m.release_date ? m.release_date.substring(0,10) : ''}
+                            </p>
+                        </div>`;
+                });
+            }
+
+            // Afiseaza detaliile unui film intr-un modal
+            // Apeleaza functia get_movie_details() din baza de date 
+            async function showMovieDetails(id) {
+                const res = await fetch(`${API}/movies/${id}`);
+                // Daca filmul nu exista, Spring Boot returneaza eroarea din PL/pgSQL
+                if (!res.ok) {
+                    alert('Film negasit!');
+                    return;
+                }
+                const data = await res.json();
+                if (data.length == 0)
+                return;
+
+                document.getElementById('modalTitle').textContent = data[0].title;
+                document.getElementById('modalCategory').textContent = '🎭 ' + data[0].category;
+                document.getElementById('modalRating').textContent = '⭐ Rating: ' + data[0].rating;
+                document.getElementById('modalDate').textContent = 
+                    '📅 ' + (data[0].release_date ? data[0].release_date.substring(0,10) : 'N/A');
+                document.getElementById('modalDescription').textContent = data[0].description || '';
+
+                // Afiseaza toti actorii filmului
+                const actorsDiv = document.getElementById('modalActors');
+                actorsDiv.innerHTML = '';
+                data.forEach(row => {
+                    if (row.actor_name) {
+                        actorsDiv.innerHTML +=
+                            `<p>🎬 ${row.actor_name} - <em>${row.role || 'N/A'}</em></p>`;
+                    }
+                });
+
+                document.getElementById('movieModal').classList.add('open');
+            }
+
+            // Inchide modalul
+            function closeModal() {
+                document.getElementById('movieModal').classList.remove('open');
+            }
+
+            // Incarca istoricul vizionarilor unui client
+            // Daca clientul nu exista, prinde exceptia aruncata din PL/pgSQL
+            async function loadHistory() {
+                const id = document.getElementById('historyClientId').value;
+                if (!id) {
+                    showMessage('historyMessage', 'Introdu un ID de client!', false);
+                    return;
+                }
+
+                const res = await fetch(`${API}/clients/${id}/history`);
+                const table = document.getElementById('historyTable');
+
+                if (!res.ok) {
+                    // Exceptie prinsa din PL/pgSQL: clientul nu exista
+                    const err = await res.text();
+                    showMessage('historyMessage', err, false);
+                    table.style.display = 'none';
+                    return;
+                }
+
+                const data = await res.json();
+                const body = document.getElementById('historyBody');
+                body.innerHTML = '';
+                data.forEach(row => {
+                    body.innerHTML += `<tr>
+                        <td>${row.movie_title}</td>
+                        <td>${row.category}</td>
+                        <td>${row.watch_date ? row.watch_date.substring(0,10) : 'N/A'}</td>
+                        <td>${row.duration_minutes || 'N/A'}</td>
+                        <td>${row.status}</td>
+                        <td>${row.vote || 'Fara vot'}</td>
+                    </tr>`
+                });
+                table.style.display = 'table';
+                document.getElementById('historyMessage').style.display = 'none';
+            }
+
+            // Incarca recomandari personalizate pentru un client 
+            // Apeleaza algoritmul get_movie_recommendations() din PL/pgSQL
+            async function loadRecommendations() {
+                const id = document.getElementById('recClientId').value;
+                if (!id) {
+                    showMessage('recMessage', 'Introdu un ID de client!', false);
+                    return;
+                }
+
+                const res = await fetch(`${API}/clients/${id}/recommendations`);
+                if (!res.ok) {
+                    const err = await res.text();
+                    showMessage('recMessage', err, false);
+                    return;
+                }
+
+                const data = await res.json();
+                const grid = document.getElementById('recGrid');
+                grid.innerHTML = '';
+                data.forEach(m => {
+                    grid.innerHTML += `
+                        <div class="movie-card">
+                            <h3>${m.rec_title}</h3>
+                            <span class="category">${m.rec_category}</span>
+                            <p class="rating">⭐ ${m.rec_rating}</p>
+                            <p style="font-size:12px;color:#f5c518;margin-top:6px;">
+                                Scor compatibilitate: ${m.rec_compatibility_score}
+                            </p>
+                        </div>`;
+                });
+                document.getElementById('recMessage').style.display = 'none';
+            }
+
+            // Adauga o vizionare noua in baza de date
+            // Daca clientul/filmul/versiunea nu exista, prinde exceptia din PL/pgSQL
+            async function addWatchlist() {
+                const body = {
+                    clientId: parseInt(document.getElementById('wClientId').value),
+                    movieId: parseInt(document.getElementById('wMovieId').value),
+                    versionId: parseInt(document.getElementById('wVersionId').value),
+                    duration: parseInt(document.getElementById('wDuration').value)
+                };
+
+                const res = await fetch(`${API}/watchlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                const text = await res.text();
+                showMessage('watchlistMessage', text, res.ok);
+            }
+
+            // Adauga o recenzie noua 
+            // Triggerul trg_check_watch_before_review verifica daca filmul a fost vazut
+            // Triggerul trg_update_rating actualizeaza automat rating-ul filmului
+            async function addReview() {
+                const body = {
+                    clientId: parseInt(document.getElementById('rClientId').value),
+                    movieId: parseInt(document.getElementById('rMovieId').value),
+                    vote: parseInt(document.getElementById('rVote').value),
+                    comment: document.getElementById('rComment').value,
+                    liked: document.getElementById('rLiked').checked,
+                    interesting: document.getElementById('rInteresting').checked,
+                    wouldRecommend: document.getElementById('rRecommend').checked,
+                    wouldRewatch: document.getElementById('rRewatch').checked,
+                    goodActing: document.getElementById('rActing').checked
+                };
+
+                const res = await fetch(`${API}/reviews`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                const text = await res.text();
+                showMessage('reviewMessage', text, res.ok);
+            }
+
+            // Afiseaza un mesaj de succes (verde) sau eroare (rosu)
+            function showMessage(id, text, success) {
+                const el = document.getElementById(id);
+                el.textContent = text;
+                el.className = 'message ' + (success ? 'success' : 'error');
+            }
+
+            // La incarcarea paginii, afiseaza automat toate filmele
+            loadMovies();
+        </script>
+
+    </body>
+</html>
